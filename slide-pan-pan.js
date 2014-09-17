@@ -176,8 +176,13 @@
 				}
 
 				fw = box.width();
-					e.preventDefault();
-
+				e.preventDefault();
+				if ( Math.abs(　this.left ) < Math.abs(　this.top ) ) {
+					var navCurrent = box.children('nav').find('li.current');
+					setTimeout(function(){
+						navCenter( navCurrent );
+					}, 500);
+				}
 				if ( this.left < -50 ) {
 					if ( $(this).next('div')[0] ) {
 						$(this).stop().animate({
