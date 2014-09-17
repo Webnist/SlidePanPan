@@ -1,6 +1,7 @@
 #Slide Pan Pan
 
 Switch the content tab.
+[Slide Pan Pan demo](http://webni.st/slide-pan-pan)
 
 ##Setup
 
@@ -130,4 +131,4 @@ Style please refer to slide-pan-pan.css.
 
 ##License
 
-Slide Pan Pan is Copyright © 2014 [Webnist](http://webni.st) and is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+Slide Pan Pan is Copyright © 2014 [Webnist](http://webnist.jp) and is licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT).
