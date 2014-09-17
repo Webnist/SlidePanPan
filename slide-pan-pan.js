@@ -58,6 +58,7 @@
 		navUl.on({
 			'touchstart mousedown': function(e) {
 				e.preventDefault();
+				this.bodyWidth  = $('body').width();
 				this.fw         = parseInt( box.width(), 10 );
 				this.navUlWidth = parseInt( navUl.outerWidth(true), 10 );
 				this.max        = this.navUlWidth - this.fw;
@@ -121,15 +122,17 @@
 					}
 				}
 				this.accel = 0;
-				if ( this.left > 0 ) {
-					$(this).stop().animate({
-						left:0
-					}, 500 );
-				}
-				if ( this.left < -this.max) {
-					$(this).stop().animate({
-						left:-this.max
-					}, 500 );
+				if ( this.bodyWidth < this.fw ) {
+					if ( this.left > 0 ) {
+						$(this).stop().animate({
+							left:0
+						}, 500 );
+					}
+					if ( this.left < -this.max) {
+						$(this).stop().animate({
+							left:-this.max
+						}, 500 );
+					}
 				}
 				this.touched = false;
 			}
@@ -229,10 +232,12 @@
 	};
 
 	function navCenter ( el ) {
+		var bodyWidth    = $('body').width();
 		var box          = spp.element;
 		var boxWidth     = parseInt( box.outerWidth( true ), 10 );
 		var boxHalf      = parseInt( boxWidth / 2, 10 );
 		var wrap         = el.parent('ul');
+		var wrapWidth    = parseInt( wrap.outerWidth( true ), 10 );
 		var elWidth      = parseInt( el.outerWidth( true ), 10 );
 		var elHalf       = parseInt( elWidth / 2, 10 );
 		var elLeft       = parseInt( el.position().left, 10 );
@@ -243,8 +248,11 @@
 		var elLastLeft   = parseInt( elLast.position().left, 10 );
 		var elLastRight  = elLastWidth + elLastLeft;
 		var elEnd        = boxWidth - elLastRight;
-
-		if ( -elEnd <= elLeft ) {
+		if ( bodyWidth > wrapWidth ) {
+			wrap.stop().animate({
+				left: 0
+			}, 500, 'linear' );
+		} else if ( -elEnd <= elLeft ) {
 			wrap.stop().animate({
 				left: elEnd
 			}, 500, 'linear' );
