@@ -76,7 +76,9 @@
 				e.preventDefault();
 				this.move       = true;
 				this.left = this.left - (this.pageX - (isTouch ? e.originalEvent.touches[0].clientX : e.pageX) );
-				$(this).css({left:this.left});
+				if ( this.bodyWidth < this.navUlWidth ) {
+					$(this).css({left:this.left});
+				}
 				this.accel = ( (isTouch ? e.originalEvent.touches[0].clientX : e.pageX) - this.pageX ) * 5;
 				this.pageX = ( isTouch ? e.originalEvent.touches[0].clientX : e.pageX );
 			},
@@ -84,45 +86,45 @@
 				if (!this.touched) {
 					return;
 				}
-				this.left += this.accel
-				$(this).animate({
-					left : this.left
-				}, 200, 'linear' );
-				if ( !this.move ) {
-					tapTarget = $(e.target);
-					if ( tapTarget.is('li') ) {
-						index     = parseInt( tapTarget.index(), 10 );
-						var leftContents = parseInt( postsContents.eq(index).prev('div').css( 'left' ), 10 );
-						var rightContents = parseInt( postsContents.eq(index).next('div').css( 'left' ), 10 );
+				if ( this.bodyWidth < this.navUlWidth ) {
+					this.left += this.accel
+					$(this).animate({
+						left : this.left
+					}, 200, 'linear' );
+					if ( !this.move ) {
+						tapTarget = $(e.target);
+						if ( tapTarget.is('li') ) {
+							index     = parseInt( tapTarget.index(), 10 );
+							var leftContents = parseInt( postsContents.eq(index).prev('div').css( 'left' ), 10 );
+							var rightContents = parseInt( postsContents.eq(index).next('div').css( 'left' ), 10 );
 
-						navLi.removeClass('current');
-						tapTarget.addClass('current');
-						currentBar( tapTarget, e );
-						navCenter( tapTarget );
-						if ( isNaN( leftContents ) && isNaN( rightContents ) ) {
-							postsContents.eq(index).prevAll('div').stop().animate({
-								left:-this.fw
-							}, 500, 'linear' );
-						} else if ( isNaN( leftContents ) ) {
-							postsContents.stop().animate({
-								left:0
-							}, 500, 'linear' );
-						} else if ( -this.fw == leftContents ) {
-							postsContents.eq(index).stop().animate({
-								left:0
-							}, 500, 'linear' );
-							postsContents.eq(index).nextAll('div').stop().animate({
-								left:0
-							}, 500, 'linear' );
-						} else {
-							postsContents.eq(index).prevAll('div').stop().animate({
-								left:-this.fw
-							}, 500, 'linear' );
+							navLi.removeClass('current');
+							tapTarget.addClass('current');
+							currentBar( tapTarget, e );
+							navCenter( tapTarget );
+							if ( isNaN( leftContents ) && isNaN( rightContents ) ) {
+								postsContents.eq(index).prevAll('div').stop().animate({
+									left:-this.fw
+								}, 500, 'linear' );
+							} else if ( isNaN( leftContents ) ) {
+								postsContents.stop().animate({
+									left:0
+								}, 500, 'linear' );
+							} else if ( -this.fw == leftContents ) {
+								postsContents.eq(index).stop().animate({
+									left:0
+								}, 500, 'linear' );
+								postsContents.eq(index).nextAll('div').stop().animate({
+									left:0
+								}, 500, 'linear' );
+							} else {
+								postsContents.eq(index).prevAll('div').stop().animate({
+									left:-this.fw
+								}, 500, 'linear' );
+							}
 						}
 					}
-				}
-				this.accel = 0;
-				if ( this.bodyWidth < this.fw ) {
+					this.accel = 0;
 					if ( this.left > 0 ) {
 						$(this).stop().animate({
 							left:0
