@@ -125,7 +125,7 @@ within the head tag
 Style please refer to slide-pan-pan.css.
 
 ##Changelog
-`0.7.1.0` / `17.08.2014`
+`0.7.1.0` / `17.09.2014`
 
 - Plugin release
 
