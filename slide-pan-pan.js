@@ -1,6 +1,6 @@
 /**
  * Slide Pan Pan
- * Version: 0.7.2.0
+ * Version: 0.7.2.1
  * Author: @Webnist
  * Site: http://webni.st
  * Licensed under the MIT license
@@ -253,20 +253,21 @@
 		var boxWidth     = parseInt( box.outerWidth( true ), 10 );
 		var boxHalf      = parseInt( boxWidth / 2, 10 );
 		var wrap         = el.parent('ul');
+		var wrapWidth    = parseInt( wrap.outerWidth( true ), 10 );
 		var elWidth      = parseInt( el.outerWidth( true ), 10 );
 		var elHalf       = parseInt( elWidth / 2, 10 );
 		var elLeft       = parseInt( el.position().left, 10 );
 		var elCenter     = elHalf + elLeft;
 		var elRight      = elWidth + elLeft;
 		var mvCenter     = elCenter - boxHalf;
-		var mvHalf       = elCenter - boxWidth;
+		var mvHalf       = wrapWidth - elRight;
 		var elLast       = wrap.children('li:last');
 		var elLastWidth  = parseInt( elLast.outerWidth( true ), 10 );
 		var elLastLeft   = parseInt( elLast.position().left, 10 );
 		var elLastRight  = elLastWidth + elLastLeft;
 		var elEnd        = boxWidth - elLastRight;
 
-		if ( boxHalf <= mvHalf ) {
+		if ( boxHalf >= mvHalf ) {
 			wrap.stop().animate({
 				left: elEnd
 			}, spp.settingspeed, 'linear' );

@@ -143,6 +143,9 @@ Here is list of all available
 Style please refer to slide-pan-pan.css.
 
 ##Changelog
+`0.7.2.1` / `18.09.2014`
+- Code fixes
+
 `0.7.2.0` / `18.09.2014`
 - Code fixes
 - Added option
