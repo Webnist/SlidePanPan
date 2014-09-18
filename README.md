@@ -1,6 +1,6 @@
 #Slide Pan Pan
 
-Switch the content tab.
+Switch the content tab.  
 [Slide Pan Pan demo](http://webni.st/slide-pan-pan)
 
 ##Setup
@@ -121,10 +121,32 @@ within the head tag
 </script>
 ```
 
+… or with custom options
+
+``` html
+<script>
+	(function($){
+		$('aside#slide-pan-pan').slidePanPan({
+			speed: 250
+		});
+	})(jQuery);
+</script>
+```
+##Options
+Here is list of all available
+
+| Option | Default | Type | Description
+|--------|---------|------|------------
+| `speed` | `200` | int | Animation time in ms
+
 ##Note
 Style please refer to slide-pan-pan.css.
 
 ##Changelog
+`0.7.2.0` / `18.09.2014`
+- Code fixes
+- Added option
+
 `0.7.1.0` / `17.09.2014`
 
 - Plugin release

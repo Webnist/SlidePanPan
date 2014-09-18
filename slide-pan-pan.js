@@ -1,6 +1,6 @@
 /**
  * Slide Pan Pan
- * Version: 0.7.1.0
+ * Version: 0.7.2.0
  * Author: @Webnist
  * Site: http://webni.st
  * Licensed under the MIT license
@@ -8,11 +8,17 @@
 (function($){
 	var spp = {}, isTouch = ('ontouchstart' in window);
 
-	$.fn.slidePanPan = function() {
+	$.fn.slidePanPan = function( options ) {
 		if ( ! $(this)[0] )
 			return;
 
+		var defaults = {
+			speed : 200
+		};
+		var setting = $.extend( defaults, options );
+
 		spp.element        = this;
+		spp.setting        = setting;
 		var box            = $(this);
 		var nav            = box.children('nav');
 		var navUl          = nav.children('ul');
@@ -90,7 +96,7 @@
 					this.left += this.accel
 					$(this).animate({
 						left : this.left
-					}, 200, 'linear' );
+					}, setting.speed, 'linear' );
 				}
 				if ( !this.move ) {
 					tapTarget = $(e.target);
@@ -106,36 +112,39 @@
 						if ( isNaN( leftContents ) && isNaN( rightContents ) ) {
 							postsContents.eq(index).prevAll('div').stop().animate({
 								left:-this.fw
-							}, 500, 'linear' );
+							}, setting.speed, 'linear' );
 						} else if ( isNaN( leftContents ) ) {
 							postsContents.stop().animate({
 								left:0
-							}, 500, 'linear' );
+							}, setting.speed, 'linear' );
 						} else if ( -this.fw == leftContents ) {
 							postsContents.eq(index).stop().animate({
 								left:0
-							}, 500, 'linear' );
+							}, setting.speed, 'linear' );
 							postsContents.eq(index).nextAll('div').stop().animate({
 								left:0
-							}, 500, 'linear' );
+							}, setting.speed, 'linear' );
 						} else {
 							postsContents.eq(index).prevAll('div').stop().animate({
 								left:-this.fw
-							}, 500, 'linear' );
+							}, setting.speed, 'linear' );
 						}
 					}
+					$('html, body').stop().animate({
+						'scrollTop':this.home
+					}, 0, 'linear' );
 				}
 				this.accel = 0;
 				if ( this.bodyWidth < this.navUlWidth ) {
 					if ( this.left > 0 ) {
 						$(this).stop().animate({
 							left:0
-						}, 500 );
+						}, setting.speed );
 					}
 					if ( this.left < -this.max) {
 						$(this).stop().animate({
 							left:-this.max
-						}, 500 );
+						}, setting.speed );
 					}
 				}
 				this.touched = false;
@@ -181,34 +190,34 @@
 					var navCurrent = box.children('nav').find('li.current');
 					setTimeout(function(){
 						navCenter( navCurrent );
-					}, 500);
+					}, setting.speed );
 				}
 				if ( this.left < -50 ) {
 					if ( $(this).next('div')[0] ) {
 						$(this).stop().animate({
 							left:-fw
-						}, 500, 'linear' );
+						}, setting.speed, 'linear' );
 						currentBar( navLi.eq(this.index).next('li'), e );
 						navCenter( navLi.eq(this.index).next('li') );
 						$('html, body').stop().animate({
 							'scrollTop':this.home
-						}, 500, 'linear' );
+						}, 0, 'linear' );
 					}
 				} else if ( this.left > 50 ) {
 					if ( $(this).prev('div')[0] ) {
 						$(this).prev('div').stop().animate({
 							left:0
-						}, 500);
+						}, setting.speed);
 						currentBar( navLi.eq(this.index).prev('li'), e );
 						navCenter( navLi.eq(this.index).prev('li') );
 						$('html, body').stop().animate({
 							'scrollTop':this.home
-						}, 500, 'linear' );
+						}, 0, 'linear' );
 					}
 				} else {
 					$(this).stop().animate({
 						left:0
-					}, 500);
+					}, setting.speed );
 				}
 				this.touched = false;
 			}
@@ -221,12 +230,11 @@
 		var mLeft      = parseInt( el.css('margin-left'), 10 );
 		var left       = parseInt( el.position().left, 10 ) + mLeft;
 		var currentBar = $('i#current-bar');
-
 		if ( ev ) {
 			currentBar.stop().animate({
 				width: width,
 				left: left
-			}, 500, 'linear' );
+			}, spp.settingspeed, 'linear' );
 			el.siblings('li').removeClass('next prev current');
 			el.removeClass('next prev');
 			el.addClass('current');
@@ -241,40 +249,37 @@
 	};
 
 	function navCenter ( el ) {
-		var bodyWidth    = $('body').width();
 		var box          = spp.element;
 		var boxWidth     = parseInt( box.outerWidth( true ), 10 );
 		var boxHalf      = parseInt( boxWidth / 2, 10 );
 		var wrap         = el.parent('ul');
-		var wrapWidth    = parseInt( wrap.outerWidth( true ), 10 );
 		var elWidth      = parseInt( el.outerWidth( true ), 10 );
 		var elHalf       = parseInt( elWidth / 2, 10 );
 		var elLeft       = parseInt( el.position().left, 10 );
 		var elCenter     = elHalf + elLeft;
+		var elRight      = elWidth + elLeft;
 		var mvCenter     = elCenter - boxHalf;
+		var mvHalf       = elCenter - boxWidth;
 		var elLast       = wrap.children('li:last');
 		var elLastWidth  = parseInt( elLast.outerWidth( true ), 10 );
 		var elLastLeft   = parseInt( elLast.position().left, 10 );
 		var elLastRight  = elLastWidth + elLastLeft;
 		var elEnd        = boxWidth - elLastRight;
-		if ( bodyWidth > wrapWidth ) {
-			wrap.stop().animate({
-				left: 0
-			}, 500, 'linear' );
-		} else if ( -elEnd <= elLeft ) {
+
+		if ( boxHalf <= mvHalf ) {
 			wrap.stop().animate({
 				left: elEnd
-			}, 500, 'linear' );
+			}, spp.settingspeed, 'linear' );
 		}
 		else if ( boxHalf <= elCenter ) {
 			wrap.stop().animate({
 				left: -mvCenter
-			}, 500, 'linear' );
+			}, spp.settingspeed, 'linear' );
 		}
 		else {
 			wrap.stop().animate({
 				left: 0
-			}, 500, 'linear' );
+			}, spp.settingspeed, 'linear' );
 		}
 	};
 
